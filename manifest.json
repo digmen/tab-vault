@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Vault",
+  "version": "1.0",
+  "description": "Park tabs to free memory, restore them anytime",
+  "permissions": ["tabs", "storage", "contextMenus", "tabGroups"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
