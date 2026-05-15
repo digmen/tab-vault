@@ -24,7 +24,7 @@ Chrome Web Store submission is planned. For now, load it unpacked:
 
 1. Download or clone this repository
    ```
-   git clone https://github.com/YOUR_USERNAME/tab-vault.git
+   git clone https://github.com/digmen/tab-vault
    ```
 2. Open Chrome and go to `chrome://extensions/`
 3. Enable **Developer mode** (top-right toggle)
