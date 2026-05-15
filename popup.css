@@ -223,3 +223,45 @@ body {
   background: rgba(239,68,68,0.14);
   border-color: rgba(239,68,68,0.32);
 }
+
+/* ── Drag handle ── */
+.drag-handle {
+  color: #2a2a40;
+  font-size: 13px;
+  cursor: grab;
+  flex-shrink: 0;
+  user-select: none;
+  line-height: 1;
+  transition: color 0.12s;
+}
+.tab-item:hover .drag-handle { color: #55557a; }
+.tab-item.dragging { opacity: 0.35; cursor: grabbing; }
+
+/* Drop position indicators */
+.tab-item.drag-above { box-shadow: 0 -2px 0 #7c6bff; }
+.tab-item.drag-below { box-shadow: 0 2px 0 #7c6bff; }
+
+/* ── Star button ── */
+.btn-star {
+  background: none;
+  border: none;
+  color: #2a2a45;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 1px;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s, transform 0.12s;
+}
+.btn-star:hover { color: #f9ab00; transform: scale(1.2); }
+.btn-star.starred { color: #f9ab00; }
+
+/* Starred item — subtle warm tint */
+.tab-item.is-starred {
+  background: rgba(249,171,0,0.04);
+  border-color: rgba(249,171,0,0.14);
+}
+.tab-item.is-starred:hover {
+  background: rgba(249,171,0,0.08);
+  border-color: rgba(249,171,0,0.26);
+}

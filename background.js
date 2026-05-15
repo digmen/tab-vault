@@ -68,7 +68,15 @@ async function parkTabs(tabs) {
 
   const result = await chrome.storage.local.get(STORAGE_KEY);
   const existing = result[STORAGE_KEY] || [];
-  await chrome.storage.local.set({ [STORAGE_KEY]: [...newParked, ...existing] });
+  // Insert new (unstarred) tabs after all starred items
+  const firstUnstarred = existing.findIndex(t => !t.starred);
+  const insertAt = firstUnstarred === -1 ? existing.length : firstUnstarred;
+  const updated = [
+    ...existing.slice(0, insertAt),
+    ...newParked,
+    ...existing.slice(insertAt)
+  ];
+  await chrome.storage.local.set({ [STORAGE_KEY]: updated });
 
   await chrome.tabs.remove(parkable.map(t => t.id));
 }

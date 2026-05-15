@@ -1,6 +1,5 @@
 const STORAGE_KEY = 'parkedTabs';
 
-// Chrome tab group color → hex
 const GROUP_COLORS = {
   grey:   '#5f6368',
   blue:   '#1a73e8',
@@ -16,12 +15,13 @@ const GROUP_COLORS = {
 const FALLBACK_FAVICON = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%23444'/><text x='8' y='12' font-size='10' text-anchor='middle' fill='%23999'>?</text></svg>`;
 
 let allTabs = [];
+let dragSrcId = null;
 
 // ── Load ──────────────────────────────────────────────────
 async function loadTabs() {
   const result = await chrome.storage.local.get(STORAGE_KEY);
   allTabs = result[STORAGE_KEY] || [];
-  renderList(allTabs);
+  renderFiltered();
 }
 
 // ── Render ────────────────────────────────────────────────
@@ -45,7 +45,23 @@ function renderList(tabs) {
 
 function buildItem(tab) {
   const wrap = document.createElement('div');
-  wrap.className = 'tab-item';
+  wrap.className = 'tab-item' + (tab.starred ? ' is-starred' : '');
+  wrap.dataset.id = tab.id;
+  wrap.draggable = true;
+
+  // Drag handle
+  const handle = document.createElement('span');
+  handle.className = 'drag-handle';
+  handle.textContent = '⠿';
+  wrap.appendChild(handle);
+
+  // Star button
+  const starBtn = document.createElement('button');
+  starBtn.className = 'btn-star' + (tab.starred ? ' starred' : '');
+  starBtn.title = tab.starred ? 'Убрать из избранного' : 'В избранное';
+  starBtn.textContent = tab.starred ? '★' : '☆';
+  starBtn.addEventListener('click', e => { e.stopPropagation(); toggleStar(tab.id); });
+  wrap.appendChild(starBtn);
 
   // Favicon
   const img = document.createElement('img');
@@ -100,7 +116,93 @@ function buildItem(tab) {
   // Click on row = restore
   wrap.addEventListener('click', () => restoreTab(tab.id));
 
+  // Drag events
+  wrap.addEventListener('dragstart', onDragStart);
+  wrap.addEventListener('dragover',  onDragOver);
+  wrap.addEventListener('dragleave', onDragLeave);
+  wrap.addEventListener('drop',      onDrop);
+  wrap.addEventListener('dragend',   onDragEnd);
+
   return wrap;
+}
+
+// ── Star ──────────────────────────────────────────────────
+async function toggleStar(id) {
+  const idx = allTabs.findIndex(t => t.id === id);
+  if (idx === -1) return;
+
+  const tab = allTabs[idx];
+  tab.starred = !tab.starred;
+
+  // Remove from current position, then re-insert at target position
+  allTabs.splice(idx, 1);
+
+  if (tab.starred) {
+    // Starred → jump to position 0
+    allTabs.unshift(tab);
+  } else {
+    // Unstarred → place after last starred item
+    const lastStarredIdx = allTabs.reduce((last, t, i) => (t.starred ? i : last), -1);
+    allTabs.splice(lastStarredIdx + 1, 0, tab);
+  }
+
+  await saveOrder();
+  renderFiltered();
+}
+
+// ── Drag and Drop ─────────────────────────────────────────
+function onDragStart(e) {
+  dragSrcId = +this.dataset.id;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  // Required for Firefox
+  e.dataTransfer.setData('text/plain', dragSrcId);
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  clearDropIndicators();
+  const rect = this.getBoundingClientRect();
+  this.classList.add(e.clientY < rect.top + rect.height / 2 ? 'drag-above' : 'drag-below');
+}
+
+function onDragLeave() {
+  this.classList.remove('drag-above', 'drag-below');
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  clearDropIndicators();
+
+  const targetId = +this.dataset.id;
+  if (!dragSrcId || dragSrcId === targetId) return;
+
+  const srcIndex = allTabs.findIndex(t => t.id === dragSrcId);
+  const targetIndex = allTabs.findIndex(t => t.id === targetId);
+  if (srcIndex === -1 || targetIndex === -1) return;
+
+  const rect = this.getBoundingClientRect();
+  const insertBefore = e.clientY < rect.top + rect.height / 2;
+
+  const [srcTab] = allTabs.splice(srcIndex, 1);
+  const newTargetIdx = allTabs.findIndex(t => t.id === targetId);
+  allTabs.splice(insertBefore ? newTargetIdx : newTargetIdx + 1, 0, srcTab);
+
+  saveOrder();
+  renderFiltered();
+}
+
+function onDragEnd() {
+  clearDropIndicators();
+  document.querySelectorAll('.tab-item.dragging').forEach(el => el.classList.remove('dragging'));
+  dragSrcId = null;
+}
+
+function clearDropIndicators() {
+  document.querySelectorAll('.tab-item').forEach(el =>
+    el.classList.remove('drag-above', 'drag-below')
+  );
 }
 
 // ── Actions ───────────────────────────────────────────────
@@ -113,7 +215,7 @@ async function restoreTab(id) {
 
 async function removeTab(id) {
   allTabs = allTabs.filter(t => t.id !== id);
-  await chrome.storage.local.set({ [STORAGE_KEY]: allTabs });
+  await saveOrder();
   renderFiltered();
 }
 
@@ -124,11 +226,15 @@ async function restoreAll() {
   }
   const ids = new Set(visible.map(t => t.id));
   allTabs = allTabs.filter(t => !ids.has(t.id));
-  await chrome.storage.local.set({ [STORAGE_KEY]: allTabs });
+  await saveOrder();
   renderFiltered();
 }
 
-// ── Search helpers ────────────────────────────────────────
+async function saveOrder() {
+  await chrome.storage.local.set({ [STORAGE_KEY]: allTabs });
+}
+
+// ── Search ────────────────────────────────────────────────
 function getFiltered() {
   const q = document.getElementById('search').value.toLowerCase().trim();
   if (!q) return allTabs;
@@ -147,7 +253,6 @@ document.getElementById('parkCurrent').addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab) return;
   await chrome.runtime.sendMessage({ action: 'parkTab', tab });
-  // Popup closes when the tab is removed, so just reload the list
   setTimeout(loadTabs, 300);
 });
 
