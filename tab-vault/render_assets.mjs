@@ -15,6 +15,11 @@ const targets = [
   { html: 'icon.html',          out: 'icon-store-128.png',        w: 128,  h: 128,  alpha: true },
   { html: 'promo-small.html',   out: 'promo-small-440x280.png',   w: 440,  h: 280,  alpha: false },
   { html: 'promo-marquee.html', out: 'promo-marquee-1400x560.png', w: 1400, h: 560, alpha: false },
+  // Localized store screenshots — 1280 x 800, one HTML with ?n= scene switch
+  { html: 'screenshot.html?n=1', out: 'screenshot-1-1280x800.png', w: 1280, h: 800, alpha: false },
+  { html: 'screenshot.html?n=2', out: 'screenshot-2-1280x800.png', w: 1280, h: 800, alpha: false },
+  { html: 'screenshot.html?n=3', out: 'screenshot-3-1280x800.png', w: 1280, h: 800, alpha: false },
+  { html: 'screenshot.html?n=4', out: 'screenshot-4-1280x800.png', w: 1280, h: 800, alpha: false },
 ];
 
 const browser = await puppeteer.launch({
@@ -26,7 +31,9 @@ const browser = await puppeteer.launch({
 for (const t of targets) {
   const page = await browser.newPage();
   await page.setViewport({ width: t.w, height: t.h, deviceScaleFactor: SCALE });
-  const url = 'file://' + path.join(design, t.html).replace(/\\/g, '/');
+  const [file, query = ''] = t.html.split('?');
+  const url =
+    'file://' + path.join(design, file).replace(/\\/g, '/') + (query ? '?' + query : '');
   await page.goto(url, { waitUntil: 'load' });
   await new Promise((r) => setTimeout(r, 200));
   await page.screenshot({

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="_common.css" />
+<style>
+  .stage { width: 1280px; height: 800px; display: flex; align-items: center;
+           gap: 40px; padding: 0 90px; }
+  .glow-a { width: 640px; height: 640px; left: -160px; top: -200px; background: #7c6bff; opacity: .34; }
+  .glow-b { width: 520px; height: 520px; right: -160px; bottom: -220px; background: #4f3fc4; opacity: .28; }
+
+  .copy { width: 470px; flex: none; position: relative; z-index: 2; }
+  .kicker { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 22px;
+            padding: 7px 15px; border-radius: 999px; font-size: 14px; font-weight: 600;
+            color: var(--accent-l); background: rgba(124,107,255,.1);
+            border: 1px solid rgba(124,107,255,.24); }
+  .kicker .logo { width: 22px; height: 22px; border-radius: 7px; }
+  .kicker .logo svg { width: 60%; height: 60%; }
+  .headline { font-size: 50px; font-weight: 800; line-height: 1.06; letter-spacing: -1.6px;
+              color: var(--text); }
+  .headline b { color: var(--accent-l); }
+  .sub { margin-top: 20px; font-size: 21px; line-height: 1.45; color: var(--dim); font-weight: 450; }
+  .pts { margin-top: 26px; display: grid; gap: 13px; }
+  .pt { display: flex; align-items: center; gap: 12px; font-size: 17px; color: #c7c4de; }
+  .pt .c { width: 24px; height: 24px; flex: none; border-radius: 7px;
+           background: rgba(124,107,255,.15); border: 1px solid rgba(124,107,255,.3);
+           display: grid; place-items: center; }
+  .pt .c svg { width: 13px; height: 13px; }
+
+  .shot { flex: 1; display: flex; justify-content: center; align-items: center;
+          position: relative; z-index: 2; }
+
+  /* popup */
+  .popup { width: 410px; height: 600px; border-radius: 22px; overflow: hidden;
+    background: linear-gradient(180deg, #100e1a 0%, #0c0b15 100%);
+    border: 1px solid rgba(255,255,255,.09);
+    box-shadow: 0 44px 100px -34px rgba(0,0,0,.9), 0 0 0 1px rgba(124,107,255,.07),
+                inset 0 1px 0 rgba(255,255,255,.05);
+    display: flex; flex-direction: column; font-size: 13.5px; }
+  .p-head { display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 17px; border-bottom: 1px solid var(--line); }
+  .p-title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: #fff; }
+  .p-logo { width: 26px; height: 26px; border-radius: 8px; }
+  .p-logo svg { width: 60%; height: 60%; }
+  .p-count { background: rgba(124,107,255,.16); color: var(--accent-l);
+             border: 1px solid rgba(124,107,255,.28); border-radius: 20px;
+             padding: 2px 10px; font-size: 11.5px; font-weight: 600; }
+  .p-clear { color: var(--red); background: rgba(248,113,113,.08);
+             border: 1px solid rgba(248,113,113,.2); border-radius: 8px;
+             padding: 6px 12px; font-size: 12.5px; font-weight: 500; }
+  .p-search { display: flex; align-items: center; gap: 9px; margin: 12px 15px 6px;
+              padding: 10px 14px; border-radius: 9px; background: rgba(255,255,255,.05);
+              border: 1px solid rgba(255,255,255,.08); color: var(--dim2); font-size: 13.5px; }
+  .p-search.active { border-color: rgba(124,107,255,.45); background: rgba(124,107,255,.06); color: #d8d5ea; }
+  .p-search svg { width: 15px; height: 15px; flex: none; }
+  .p-list { flex: 1; overflow: hidden; padding: 7px 11px; display: flex; flex-direction: column; gap: 5px; }
+  .row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 11px;
+         background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); position: relative; }
+  .row.group { border-left-width: 3px; }
+  .row.star { background: rgba(249,171,0,.05); border-color: rgba(249,171,0,.16); }
+  .row.hover { background: rgba(124,107,255,.08); border-color: rgba(124,107,255,.34);
+               box-shadow: 0 4px 16px -6px rgba(124,107,255,.42); }
+  .row.drag { border-color: rgba(124,107,255,.5); box-shadow: 0 -2px 0 #7c6bff, 0 8px 20px -8px rgba(124,107,255,.5); }
+  .handle { color: #34324c; font-size: 12px; }
+  .row.drag .handle { color: var(--accent-l); }
+  .st { font-size: 15px; line-height: 1; }
+  .st.on { color: var(--amber); }
+  .st.off { color: #2c2a44; }
+  .fav { width: 19px; height: 19px; border-radius: 5px; flex: none; display: grid;
+         place-items: center; font-size: 9.5px; font-weight: 700; color: #fff; }
+  .meta { flex: 1; min-width: 0; }
+  .rt { color: #eceafa; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ru { font-size: 11.5px; color: var(--dim2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .acts { display: flex; gap: 4px; }
+  .ib { width: 27px; height: 27px; border-radius: 7px; display: grid; place-items: center;
+        font-size: 14px; color: var(--accent-l); background: rgba(124,107,255,.14);
+        border: 1px solid rgba(124,107,255,.28); }
+  .ib.del { color: var(--red); background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.24); }
+  .tip { position: absolute; z-index: 3; background: #1c1830; color: #d8d5ea; font-size: 12px;
+         padding: 6px 11px; border-radius: 8px; border: 1px solid rgba(124,107,255,.3);
+         box-shadow: 0 8px 20px -6px rgba(0,0,0,.6); white-space: nowrap; }
+  .p-foot { display: flex; gap: 8px; padding: 13px 15px; border-top: 1px solid var(--line); }
+  .pb { flex: 1; text-align: center; border-radius: 9px; padding: 11px; font-size: 13px; font-weight: 600; }
+  .pb.save { color: var(--green); background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.24); }
+  .pb.rest { color: var(--accent-l); background: rgba(124,107,255,.12); border: 1px solid rgba(124,107,255,.26); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <div class="copy" id="copy"></div>
+  <div class="shot"><div class="popup" id="popup"></div></div>
+</div>
+
+<script>
+const LOGO = `<svg viewBox="0 0 48 48" fill="none"><path d="M24 9 V25.5" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><path d="M16.5 18.5 L24 26 L31.5 18.5" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 29 V35.5 A3.5 3.5 0 0 0 14.5 39 H33.5 A3.5 3.5 0 0 0 37 35.5 V29" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const CHECK = `<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5 L10 17.5 L19 6.5" stroke="#b3a8ff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const SEARCHI = `<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#9490b4" stroke-width="2"/><path d="M16 16 L20 20" stroke="#9490b4" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+const R = {
+  gh:  {fav:'GH', c:'#4a4a5a,#24242e', t:'Tab Vault — GitHub repository', u:'github.com/digmen/tab-vault'},
+  fig: {fav:'Fi', c:'#8b5cf6,#6d28d9', t:'UI Components · Figma',          u:'figma.com/design/AbcXyz123', g:'#1a73e8'},
+  not: {fav:'N',  c:'#ef4444,#b91c1c', t:'Project Notes — Q2 Roadmap',     u:'notion.so/workspace/hub',   g:'#1e8e3e'},
+  py:  {fav:'Py', c:'#3b82f6,#1e3a8a', t:'Python 3 Docs — os module',      u:'docs.python.org/3/library/os'},
+  yt:  {fav:'▶',  c:'#f87171,#dc2626', t:'How it works — YouTube',         u:'youtube.com/watch?v=xyz',   g:'#d93025'},
+};
+
+function row(k, o = {}) {
+  const r = R[k];
+  const cls = ['row'];
+  if (r.g && !o.nogroup) cls.push('group');
+  if (o.star) cls.push('star');
+  if (o.hover) cls.push('hover');
+  if (o.drag) cls.push('drag');
+  const border = (r.g && !o.nogroup) ? `border-left-color:${r.g}` : '';
+  const star = o.star ? '<span class="st on">★</span>' : '<span class="st off">☆</span>';
+  const acts = o.hover ? '<span class="acts"><span class="ib">↗</span><span class="ib del">×</span></span>' : '';
+  return `<div class="${cls.join(' ')}" style="${border}">
+    <span class="handle">⠿</span>${star}
+    <span class="fav" style="background:linear-gradient(135deg,${r.c})">${r.fav}</span>
+    <span class="meta"><div class="rt">${r.t}</div><div class="ru">${r.u}</div></span>${acts}</div>`;
+}
+
+const SCENES = {
+  1: {
+    kicker: 'Tab Vault',
+    headline: 'Park tabs.<br>Free up <b>memory</b>.',
+    sub: 'Save open tabs to a tidy list and close them — then restore any one with a single click.',
+    pts: ['One-click save from the toolbar', 'Survives browser restarts', '100% offline, no tracking'],
+    count: 5, search: null,
+    rows: [row('gh',{star:true}), row('fig'), row('not'), row('py'), row('yt')],
+  },
+  2: {
+    kicker: 'Instant search',
+    headline: 'Find any tab<br><b>as you type</b>.',
+    sub: 'Filter your whole vault by title or URL in real time — no matter how many tabs you have parked.',
+    pts: ['Matches title and URL', 'Live, zero-lag filtering'],
+    count: 5, search: 'figma',
+    rows: [row('fig')],
+  },
+  3: {
+    kicker: 'Favorites & order',
+    headline: 'Star favorites,<br><b>drag to reorder</b>.',
+    sub: 'Pin the tabs you reach for most to the top, and arrange the rest exactly how you like.',
+    pts: ['Starred items jump to the top', 'Drag-and-drop reordering'],
+    count: 5, search: null,
+    rows: [row('gh',{star:true}), row('not',{drag:true}), row('fig'), row('py'), row('yt')],
+  },
+  4: {
+    kicker: 'Tab groups',
+    headline: 'Groups stay<br><b>intact</b>.',
+    sub: 'Parked tabs keep their group color and name, so your organization is never lost.',
+    pts: ['Preserves group colors', 'Restores with context'],
+    count: 5, search: null,
+    rows: [row('fig',{hover:true}), row('not'), row('yt'), row('gh',{star:true}), row('py')],
+  },
+};
+
+const n = new URLSearchParams(location.search).get('n') || '1';
+const s = SCENES[n];
+
+document.getElementById('copy').innerHTML = `
+  <div class="kicker"><span class="logo">${LOGO}</span>${s.kicker}</div>
+  <div class="headline">${s.headline}</div>
+  <div class="sub">${s.sub}</div>
+  <div class="pts">${s.pts.map(p => `<div class="pt"><span class="c">${CHECK}</span>${p}</div>`).join('')}</div>`;
+
+const search = s.search
+  ? `<div class="p-search active">${SEARCHI}${s.search}</div>`
+  : `<div class="p-search">${SEARCHI}Search tabs…</div>`;
+const tip = s.tip ? `<div class="tip" style="top:${s.tip.top}px;left:${s.tip.left}px">${s.tip.text}</div>` : '';
+
+document.getElementById('popup').innerHTML = `
+  <div class="p-head">
+    <div class="p-title"><span class="logo p-logo">${LOGO}</span>Tab Vault <span class="p-count">${s.count}</span></div>
+    <div class="p-clear">Clear</div>
+  </div>
+  ${search}
+  <div class="p-list">${s.rows.join('')}${tip}</div>
+  <div class="p-foot"><div class="pb save">Save current tab</div><div class="pb rest">Restore all</div></div>`;
+</script>
+</body>
+</html>
