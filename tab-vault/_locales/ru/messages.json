@@ -1,0 +1,22 @@
+{
+  "appName":        { "message": "Tab Vault" },
+  "appDescription": { "message": "Сохраняйте вкладки, освобождайте память и восстанавливайте когда угодно" },
+
+  "parkTabMenu":    { "message": "Сохранить эту вкладку" },
+  "parkWindowMenu": { "message": "Сохранить все вкладки окна" },
+
+  "clearAll":           { "message": "Очистить" },
+  "searchPlaceholder":  { "message": "Поиск по вкладкам…" },
+  "parkCurrent":        { "message": "Сохранить текущую вкладку" },
+  "restoreAll":         { "message": "Восстановить все" },
+
+  "emptyState":     { "message": "Нет сохранённых вкладок" },
+  "emptyHint":      { "message": "Нажмите «Сохранить текущую вкладку» или правый клик на странице" },
+
+  "starAdd":        { "message": "В избранное" },
+  "starRemove":     { "message": "Убрать из избранного" },
+  "restore":        { "message": "Восстановить" },
+  "deleteTab":      { "message": "Удалить из списка" },
+  "groupPrefix":    { "message": "Группа:" },
+  "clearConfirm":   { "message": "Удалить все сохранённые вкладки? Это действие нельзя отменить." }
+}

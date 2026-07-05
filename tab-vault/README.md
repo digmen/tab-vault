@@ -20,16 +20,21 @@ Tab Vault is a minimal Chrome extension that lets you **save open tabs to a pers
 
 ## Installation (Developer Mode)
 
-Chrome Web Store submission is planned. For now, load it unpacked:
+Available on the Chrome Web Store. To load it manually (developer mode):
 
 1. Download or clone this repository
    ```
    git clone https://github.com/digmen/tab-vault
    ```
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable **Developer mode** (top-right toggle)
-4. Click **Load unpacked** and select the project folder
-5. The Tab Vault icon appears in your toolbar — pin it for easy access
+2. Install dependencies and build:
+   ```
+   npm install
+   npm run build
+   ```
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable **Developer mode** (top-right toggle)
+5. Click **Load unpacked** and select the **`dist/`** folder
+6. The Tab Vault icon appears in your toolbar — pin it for easy access
 
 ---
 
@@ -67,12 +72,32 @@ Chrome Web Store submission is planned. For now, load it unpacked:
 
 ```
 tab-vault/
-├── manifest.json     # Extension manifest (MV3)
-├── background.js     # Service worker — parking logic & context menus
-├── popup.html        # Popup markup
-├── popup.js          # Popup logic — render, search, restore, delete
-└── popup.css         # Styles
+├── src/
+│   ├── types.ts       # Shared types & constants
+│   ├── background.ts  # Service worker — parking logic & context menus
+│   └── popup.ts       # Popup logic — render, search, restore, delete
+├── manifest.json      # Extension manifest (MV3)
+├── popup.html         # Popup markup
+├── popup.css          # Styles
+├── build.mjs          # esbuild bundler + static-asset copy
+└── dist/              # Build output — this is what you load into Chrome
 ```
+
+---
+
+## Development
+
+The extension is written in TypeScript and bundled with [esbuild](https://esbuild.github.io/).
+
+```
+npm install        # one-time
+npm run build      # bundle src/ + copy static assets into dist/
+npm run watch      # rebuild on change (load dist/ as an unpacked extension)
+npm run typecheck  # type-check without emitting
+```
+
+Load the generated **`dist/`** folder via `chrome://extensions/` → *Load unpacked*.
+After a rebuild, hit the reload icon on the extension card to pick up changes.
 
 ---
 

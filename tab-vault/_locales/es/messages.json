@@ -1,0 +1,22 @@
+{
+  "appName":        { "message": "Tab Vault" },
+  "appDescription": { "message": "Guarda pestañas para liberar memoria y recupéralas cuando quieras" },
+
+  "parkTabMenu":    { "message": "Guardar esta pestaña" },
+  "parkWindowMenu": { "message": "Guardar todas las pestañas de la ventana" },
+
+  "clearAll":           { "message": "Limpiar" },
+  "searchPlaceholder":  { "message": "Buscar pestañas…" },
+  "parkCurrent":        { "message": "Guardar pestaña actual" },
+  "restoreAll":         { "message": "Restaurar todo" },
+
+  "emptyState":     { "message": "No hay pestañas guardadas" },
+  "emptyHint":      { "message": "Pulsa \"Guardar pestaña actual\" o haz clic derecho en la página" },
+
+  "starAdd":        { "message": "Añadir a favoritos" },
+  "starRemove":     { "message": "Quitar de favoritos" },
+  "restore":        { "message": "Restaurar" },
+  "deleteTab":      { "message": "Eliminar de la lista" },
+  "groupPrefix":    { "message": "Grupo:" },
+  "clearConfirm":   { "message": "¿Eliminar todas las pestañas guardadas? Esta acción no se puede deshacer." }
+}

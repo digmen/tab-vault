@@ -1,0 +1,22 @@
+{
+  "appName":        { "message": "Tab Vault" },
+  "appDescription": { "message": "暂停标签页以释放内存，随时一键恢复" },
+
+  "parkTabMenu":    { "message": "保存此标签页" },
+  "parkWindowMenu": { "message": "保存窗口中的所有标签页" },
+
+  "clearAll":           { "message": "清除" },
+  "searchPlaceholder":  { "message": "搜索标签页…" },
+  "parkCurrent":        { "message": "保存当前标签页" },
+  "restoreAll":         { "message": "恢复全部" },
+
+  "emptyState":     { "message": "暂无已保存的标签页" },
+  "emptyHint":      { "message": "点击"保存当前标签页"或在页面上右键单击" },
+
+  "starAdd":        { "message": "添加到收藏" },
+  "starRemove":     { "message": "从收藏中移除" },
+  "restore":        { "message": "恢复" },
+  "deleteTab":      { "message": "从列表中删除" },
+  "groupPrefix":    { "message": "分组：" },
+  "clearConfirm":   { "message": "删除所有已保存的标签页？此操作无法撤销。" }
+}

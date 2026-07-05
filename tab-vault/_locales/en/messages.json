@@ -1,0 +1,22 @@
+{
+  "appName":        { "message": "Tab Vault" },
+  "appDescription": { "message": "Park tabs to free memory, restore them anytime" },
+
+  "parkTabMenu":    { "message": "Park this tab" },
+  "parkWindowMenu": { "message": "Park all tabs in window" },
+
+  "clearAll":           { "message": "Clear" },
+  "searchPlaceholder":  { "message": "Search tabs…" },
+  "parkCurrent":        { "message": "Save current tab" },
+  "restoreAll":         { "message": "Restore all" },
+
+  "emptyState":     { "message": "No saved tabs" },
+  "emptyHint":      { "message": "Click \"Save current tab\" or right-click on a page" },
+
+  "starAdd":        { "message": "Add to favorites" },
+  "starRemove":     { "message": "Remove from favorites" },
+  "restore":        { "message": "Restore" },
+  "deleteTab":      { "message": "Remove from list" },
+  "groupPrefix":    { "message": "Group:" },
+  "clearConfirm":   { "message": "Delete all saved tabs? This cannot be undone." }
+}

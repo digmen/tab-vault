@@ -9,3 +9,11 @@ Thumbs.db
 # Chrome extension package
 *.crx
 *.pem
+
+# Build
+node_modules/
+dist/
+
+# Scratch / packaged artifacts
+image*.png
+*.zip
