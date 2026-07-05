@@ -11,7 +11,7 @@
   "restoreAll":         { "message": "恢复全部" },
 
   "emptyState":     { "message": "暂无已保存的标签页" },
-  "emptyHint":      { "message": "点击"保存当前标签页"或在页面上右键单击" },
+  "emptyHint":      { "message": "点击“保存当前标签页”或在页面上右键单击" },
 
   "starAdd":        { "message": "添加到收藏" },
   "starRemove":     { "message": "从收藏中移除" },
