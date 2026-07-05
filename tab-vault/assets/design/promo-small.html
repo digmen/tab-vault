@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="_common.css" />
+<style>
+  .stage { width: 440px; height: 280px; display: flex; flex-direction: column;
+           align-items: center; justify-content: center; padding: 34px; }
+  .glow-a { width: 360px; height: 360px; left: 50%; top: -170px; transform: translateX(-50%);
+            background: #7c6bff; opacity: .4; }
+  .glow-b { width: 300px; height: 300px; right: -120px; bottom: -150px; background: #4f3fc4; opacity: .26; }
+
+  .logo { width: 74px; height: 74px; border-radius: 20px; z-index: 2; }
+  .wordmark { margin-top: 20px; font-size: 42px; font-weight: 800; letter-spacing: -1.5px;
+              color: var(--text); z-index: 2; line-height: 1; }
+  .wordmark b { color: var(--accent-l); }
+  .tag { margin-top: 12px; font-size: 15px; font-weight: 500; color: var(--dim); z-index: 2;
+         letter-spacing: .1px; }
+  .tag i { color: var(--accent-l); font-style: normal; }
+  .chips { margin-top: 20px; display: flex; gap: 9px; z-index: 2; }
+  .chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px;
+          border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #cbc7e4;
+          background: rgba(255,255,255,.04); border: 1px solid rgba(124,107,255,.24); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .dot.g { background: var(--green); }
+  .dot.a { background: var(--amber); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <div class="logo">
+    <svg viewBox="0 0 48 48" fill="none">
+      <path d="M24 9 V25.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M16.5 18.5 L24 26 L31.5 18.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 29 V35.5 A3.5 3.5 0 0 0 14.5 39 H33.5 A3.5 3.5 0 0 0 37 35.5 V29" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div class="wordmark">Tab&nbsp;<b>Vault</b></div>
+  <div class="tag">Park tabs&nbsp; <i>·</i> &nbsp;free memory&nbsp; <i>·</i> &nbsp;restore anytime</div>
+
+  <div class="chips">
+    <span class="chip"><span class="dot g"></span>One-click save</span>
+    <span class="chip"><span class="dot"></span>Search</span>
+    <span class="chip"><span class="dot a"></span>Favorites</span>
+  </div>
+</div>
+</body>
+</html>

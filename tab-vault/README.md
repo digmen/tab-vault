@@ -61,8 +61,8 @@ Available on the Chrome Web Store. To load it manually (developer mode):
     <td align="center"><b>Parked tabs list</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/empty.png" alt="empty state" width="320"/></td>
-    <td><img src="screenshots/list.png" alt="tabs list" width="320"/></td>
+    <td><img src="assets/screenshots/empty.png" alt="empty state" width="320"/></td>
+    <td><img src="assets/screenshots/list.png" alt="tabs list" width="320"/></td>
   </tr>
 </table>
 

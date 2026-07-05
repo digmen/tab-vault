@@ -1,0 +1,48 @@
+/* Shared design tokens for Tab Vault store assets */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg0: #0a0a12;
+  --bg1: #16131f;
+  --accent: #7c6bff;
+  --accent-l: #b3a8ff;
+  --accent-d: #5a49d6;
+  --green: #4ade80;
+  --amber: #f9ab00;
+  --red: #f87171;
+  --text: #f5f4fb;
+  --dim: #9490b4;
+  --dim2: #5c5878;
+  --card: #14121e;
+  --line: rgba(255, 255, 255, 0.07);
+}
+html, body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  background: transparent;
+}
+.stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 18% 8%, #1b1730 0%, rgba(27,23,48,0) 55%),
+    linear-gradient(160deg, #0c0b16 0%, #0a0912 55%, #0d0a17 100%);
+}
+.glow { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55; pointer-events: none; }
+
+/* App logo tile */
+.logo {
+  display: grid; place-items: center;
+  background: linear-gradient(150deg, #8b7bff 0%, #6a56e8 48%, #4f3fc4 100%);
+  box-shadow:
+    0 10px 30px -6px rgba(94, 74, 220, .55),
+    inset 0 1.5px 0 rgba(255, 255, 255, .35),
+    inset 0 -8px 22px rgba(30, 18, 80, .45);
+  position: relative;
+}
+.logo::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 42%);
+  pointer-events: none;
+}
+.logo svg { width: 58%; height: 58%; position: relative; z-index: 1; }
